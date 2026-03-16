@@ -1,5 +1,7 @@
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { Bell, FileText, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { Bell, FileText, AlertTriangle, CheckCircle2, Lock } from "lucide-react";
+import { usePlan } from "@/contexts/PlanContext";
+import { Button } from "@/components/ui/button";
 
 const notifications = [
   { id: 1, icon: FileText, color: "text-primary", bg: "bg-primary/10", title: "Café & Sabor ME enviou documentos", desc: "NF-vendas-mar.pdf foi enviado", time: "Há 1 hora" },
@@ -10,6 +12,8 @@ const notifications = [
 ];
 
 const Notifications = () => {
+  const { activePlan } = usePlan();
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -19,6 +23,25 @@ const Notifications = () => {
             Acompanhe as últimas atividades dos seus clientes.
           </p>
         </div>
+
+        {activePlan === "starter" && (
+          <div className="rounded-xl border border-primary/20 bg-primary/5 p-6 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <div className="rounded-full bg-primary/10 p-2 mt-1">
+                <Lock className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-primary">Notificações Automáticas</h3>
+                <p className="text-sm text-primary/80 mt-1 max-w-lg">
+                  O plano Starter oferece apenas notificações essenciais do sistema. Atualize para o plano <strong>Professional</strong> para que o sistema cobre automaticamente seus clientes via e-mail e WhatsApp.
+                </p>
+              </div>
+            </div>
+            <Button className="shrink-0 gradient-primary text-primary-foreground border-0 hover:opacity-90">
+              Fazer Upgrade
+            </Button>
+          </div>
+        )}
 
         <div className="space-y-3">
           {notifications.map((n) => (

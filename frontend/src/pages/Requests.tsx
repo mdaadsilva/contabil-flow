@@ -3,8 +3,9 @@ import { mockRequests, mockCompanies } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, Clock } from "lucide-react";
+import { Plus, Clock, Zap, Lock } from "lucide-react";
 import { useState } from "react";
+import { usePlan } from "@/contexts/PlanContext";
 import {
   Dialog,
   DialogContent,
@@ -28,9 +29,11 @@ const statusStyle: Record<string, { label: string; className: string }> = {
 };
 
 const Requests = () => {
+  const { activePlan } = usePlan();
   const [filter, setFilter] = useState("all");
 
   const filtered = filter === "all" ? mockRequests : mockRequests.filter((r) => r.status === filter);
+  const canAutomate = activePlan === "professional" || activePlan === "business";
 
   return (
     <DashboardLayout>
@@ -42,13 +45,22 @@ const Requests = () => {
               Solicitações de documentos para seus clientes.
             </p>
           </div>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="gradient-primary border-0 text-primary-foreground hover:opacity-90">
-                <Plus className="mr-2 h-4 w-4" />
-                Nova solicitação
-              </Button>
-            </DialogTrigger>
+          <div className="flex gap-3">
+            <Button
+              variant={canAutomate ? "secondary" : "outline"}
+              className={`border-dashed ${!canAutomate ? "opacity-70 cursor-not-allowed" : ""}`}
+            >
+              {!canAutomate ? <Lock className="mr-2 h-4 w-4" /> : <Zap className="mr-2 h-4 w-4 text-warning" />}
+              Lembretes Automáticos
+              {!canAutomate && <span className="ml-2 rounded bg-primary/10 px-1.5 py-0.5 text-[10px] uppercase font-bold text-primary">Pro</span>}
+            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="gradient-primary border-0 text-primary-foreground hover:opacity-90">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Nova solicitação
+                </Button>
+              </DialogTrigger>
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Solicitar documento</DialogTitle>
@@ -82,7 +94,8 @@ const Requests = () => {
                 </Button>
               </div>
             </DialogContent>
-          </Dialog>
+            </Dialog>
+          </div>
         </div>
 
         <div className="flex gap-2">

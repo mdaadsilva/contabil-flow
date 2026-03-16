@@ -2,8 +2,9 @@ import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { mockCompanies } from "@/lib/mock-data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, ShieldAlert } from "lucide-react";
 import { useState } from "react";
+import { usePlan } from "@/contexts/PlanContext";
 import {
   Dialog,
   DialogContent,
@@ -19,11 +20,23 @@ const statusLabel: Record<string, { label: string; className: string }> = {
   atrasado: { label: "Atrasado", className: "bg-destructive/10 text-destructive" },
 };
 
+const planLimits = {
+  starter: 10,
+  professional: 50,
+  business: Infinity,
+};
+
 const Companies = () => {
+  const { activePlan } = usePlan();
   const [search, setSearch] = useState("");
+  
   const filtered = mockCompanies.filter((c) =>
     c.name.toLowerCase().includes(search.toLowerCase())
   );
+
+  const currentLimit = planLimits[activePlan];
+  const totalCompanies = mockCompanies.length;
+  const isLimitReached = totalCompanies >= currentLimit;
 
   return (
     <DashboardLayout>
@@ -31,13 +44,16 @@ const Companies = () => {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 className="font-display text-2xl font-bold text-foreground">Empresas</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Gerencie os clientes do seu escritório.
+            <p className="mt-1 text-sm text-muted-foreground flex items-center gap-2">
+              Gerencie os clientes do seu escritório. 
+              <span className="font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full text-xs">
+                {totalCompanies} / {currentLimit === Infinity ? "Ilimitado" : currentLimit}
+              </span>
             </p>
           </div>
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="gradient-primary border-0 text-primary-foreground hover:opacity-90">
+              <Button disabled={isLimitReached} className="gradient-primary border-0 text-primary-foreground hover:opacity-90">
                 <Plus className="mr-2 h-4 w-4" />
                 Nova empresa
               </Button>
