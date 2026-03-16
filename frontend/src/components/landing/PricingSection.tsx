@@ -6,48 +6,44 @@ import { Link } from "react-router-dom";
 const plans = [
   {
     name: "Starter",
-    price: "97",
-    description: "Para escritórios em crescimento",
-    limit: "Até 30 empresas",
+    price: "R$ 59",
+    description: "Para escritórios pequenos.",
+    limit: "Até 10 empresas",
     features: [
-      "30 empresas cadastradas",
-      "Upload ilimitado de documentos",
-      "Controle de pendências",
-      "Notificações por e-mail",
-      "Suporte por e-mail",
+      "Envio de documentos",
+      "Criação de pendências",
+      "Usuários básicos",
+      "Dashboard simples",
     ],
     popular: false,
   },
   {
-    name: "Pro",
-    price: "197",
-    description: "Para escritórios consolidados",
-    limit: "Até 100 empresas",
+    name: "Professional",
+    price: "R$ 129",
+    description: "Para escritórios médios.",
+    limit: "Até 50 empresas",
     features: [
-      "100 empresas cadastradas",
-      "Upload ilimitado de documentos",
-      "Controle de pendências",
-      "Notificações por e-mail",
+      "Tudo do Starter",
+      "Notificações automáticas",
+      "Lembretes de pendências",
+      "Histórico de documentos",
+      "Múltiplos usuários do escritório",
       "Dashboard avançado",
-      "Suporte prioritário",
-      "Relatórios mensais",
     ],
     popular: true,
   },
   {
-    name: "Unlimited",
-    price: "347",
-    description: "Para grandes escritórios",
+    name: "Business",
+    price: "R$ 299",
+    description: "Para escritórios grandes.",
     limit: "Empresas ilimitadas",
     features: [
-      "Empresas ilimitadas",
-      "Upload ilimitado de documentos",
-      "Controle de pendências",
-      "Notificações por e-mail",
-      "Dashboard avançado",
-      "Suporte dedicado",
-      "Relatórios mensais",
-      "API de integração",
+      "Tudo do Professional",
+      "Integração com sistemas contábeis",
+      "Armazenamento maior",
+      "Relatórios completos",
+      "Suporte prioritário",
+      "Automações",
     ],
     popular: false,
   },
@@ -93,7 +89,7 @@ const PricingSection = () => {
               </h3>
               <p className="mt-1 text-sm text-muted-foreground">{plan.description}</p>
               <div className="mt-6">
-                <span className="text-4xl font-bold text-foreground">R${plan.price}</span>
+                <span className="text-3xl font-bold tracking-tight text-foreground">{plan.price}</span>
                 <span className="text-muted-foreground">/mês</span>
               </div>
               <p className="mt-2 text-sm font-medium text-primary">{plan.limit}</p>
@@ -116,7 +112,7 @@ const PricingSection = () => {
                 }`}
                 variant={plan.popular ? "default" : "outline"}
               >
-                <Link to="/registro">Começar agora</Link>
+                <Link to={`/registro?plan=${plan.name.toLowerCase()}`}>Começar agora</Link>
               </Button>
             </motion.div>
           ))}

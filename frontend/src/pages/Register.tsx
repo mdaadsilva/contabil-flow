@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FileText, ArrowLeft } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { FileText, ArrowLeft, CheckCircle2 } from "lucide-react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
+import { usePlan, PlanType } from "@/contexts/PlanContext";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -11,9 +12,15 @@ const Register = () => {
   const [officeName, setOfficeName] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { setActivePlan } = usePlan();
+
+  const defaultPlan = (searchParams.get("plan") || "professional") as PlanType;
+  const [selectedPlan, setSelectedPlan] = useState<PlanType>(defaultPlan);
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
+    setActivePlan(selectedPlan);
     navigate("/dashboard");
   };
 
@@ -45,6 +52,36 @@ const Register = () => {
           <p className="mt-2 text-sm text-muted-foreground">
             Cadastre seu escritório contábil na plataforma.
           </p>
+
+          <div className="mt-6 space-y-3">
+            <Label>Escolha seu plano</Label>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {[
+                { id: "starter", name: "Starter", price: "R$ 59" },
+                { id: "professional", name: "Professional", price: "R$ 129" },
+                { id: "business", name: "Business", price: "R$ 299" },
+              ].map((plan) => (
+                <button
+                  key={plan.id}
+                  type="button"
+                  onClick={() => setSelectedPlan(plan.id as PlanType)}
+                  className={`relative flex flex-col items-center justify-center rounded-lg border p-3 text-center transition-all ${
+                    selectedPlan === plan.id
+                      ? "border-primary bg-primary/5 ring-1 ring-primary"
+                      : "border-border bg-card hover:bg-muted"
+                  }`}
+                >
+                  {selectedPlan === plan.id && (
+                    <div className="absolute top-2 right-2 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                      <CheckCircle2 className="h-3 w-3" />
+                    </div>
+                  )}
+                  <span className="text-sm font-semibold">{plan.name}</span>
+                  <span className="mt-1 text-xs font-medium text-muted-foreground">{plan.price}/mês</span>
+                </button>
+              ))}
+            </div>
+          </div>
 
           <form onSubmit={handleRegister} className="mt-8 space-y-4">
             <div className="space-y-2">

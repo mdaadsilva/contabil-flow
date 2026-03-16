@@ -4,6 +4,7 @@ import {
   LayoutDashboard, Users, FileText, Bell, ClipboardList, LogOut, Menu, X, ChevronLeft,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { usePlan, PlanType } from "@/contexts/PlanContext";
 
 const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/dashboard" },
@@ -18,6 +19,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { activePlan, setActivePlan } = usePlan();
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -96,7 +98,9 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           <button className="lg:hidden" onClick={() => setMobileOpen(true)}>
             <Menu className="h-5 w-5" />
           </button>
+          
           <div className="flex-1" />
+
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
               JS

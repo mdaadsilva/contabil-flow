@@ -57,12 +57,12 @@ const HeroSection = () => {
           >
             <Button asChild size="lg" className="gradient-primary border-0 px-8 text-base font-semibold text-primary-foreground shadow-lg hover:opacity-90 transition-opacity">
               <Link to="/registro">
-                Começar gratuitamente
+                Começar agora
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="px-8 text-base">
-              <Link to="#funcionalidades">Ver funcionalidades</Link>
+              <a href="#funcionalidades">Ver funcionalidades</a>
             </Button>
           </motion.div>
 

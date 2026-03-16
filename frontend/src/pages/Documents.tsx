@@ -1,9 +1,10 @@
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { mockDocuments } from "@/lib/mock-data";
 import { Input } from "@/components/ui/input";
-import { Search, FileText, Download, Eye } from "lucide-react";
+import { Search, FileText, Download, Eye, HardDrive } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { usePlan } from "@/contexts/PlanContext";
 
 const statusStyle: Record<string, { label: string; className: string }> = {
   pendente: { label: "Pendente", className: "bg-warning/10 text-warning" },
@@ -12,6 +13,7 @@ const statusStyle: Record<string, { label: string; className: string }> = {
 };
 
 const Documents = () => {
+  const { activePlan } = usePlan();
   const [search, setSearch] = useState("");
   const filtered = mockDocuments.filter(
     (d) =>
@@ -22,11 +24,27 @@ const Documents = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <div>
-          <h1 className="font-display text-2xl font-bold text-foreground">Documentos</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Todos os documentos recebidos dos seus clientes.
-          </p>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h1 className="font-display text-2xl font-bold text-foreground">Documentos</h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Todos os documentos recebidos dos seus clientes.
+            </p>
+          </div>
+          {activePlan === "business" && (
+            <div className="flex items-center gap-3 rounded-xl border bg-card px-4 py-3 shadow-sm">
+              <HardDrive className="h-5 w-5 text-primary" />
+              <div>
+                <p className="text-xs font-medium text-muted-foreground">Armazenamento (Ilimitado)</p>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <div className="h-1.5 w-24 rounded-full bg-muted overflow-hidden">
+                    <div className="h-full bg-primary w-1/4" />
+                  </div>
+                  <span className="text-xs font-bold text-foreground">124 GB</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="relative max-w-sm">
